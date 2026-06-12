@@ -27,6 +27,7 @@ public class MovementSystem : MonoBehaviour
     private Vector2 _surfaceNormal;
     
     // Physics Variables
+    private Vector2 _velocity = Vector2.zero;
     private float _xSpeedCap;
     private float _ySpeedCap;
     private float _xFriction = 0.1f;
@@ -49,6 +50,11 @@ public class MovementSystem : MonoBehaviour
     private float _jumpTime;
     private float _maxJumpTime = 0.1f;
     
+    // CachedInput
+    private Vector2 _cachedDirection = Vector2.zero;
+    private bool _cachedJump = false;
+    private bool _cachedDash = false;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -63,23 +69,35 @@ public class MovementSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        VarSet();
-        RecieveInput(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")), Input.GetKeyDown(KeyCode.Space), Input.GetKeyDown(KeyCode.LeftShift));
-        StateMachine();
+        _cachedDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if(!_cachedJump) _cachedJump = Input.GetKeyDown(KeyCode.Space);
+        if(!_cachedDash) _cachedDash = Input.GetKeyDown(KeyCode.LeftShift);
     }
 
     void FixedUpdate()
     {
+        VarSet();
+        RecieveInput(_cachedDirection, _cachedJump,_cachedDash);
+        StateMachine();
         Physics();
+        ResetInputCache();
+        
+    }
+
+    void ResetInputCache()
+    {
+        _cachedDirection = Vector2.zero;
+        _cachedJump = false;
+        _cachedDash = false;
     }
     
     
     // Reset all variables
     void VarSet()
     {
-        _dir = _rb.velocity;
-        _cayoteTime -= Time.deltaTime;
-        _jumpTime -= Time.deltaTime;
+        _dir = _velocity;
+        _cayoteTime -= Time.fixedDeltaTime;
+        _jumpTime -= Time.fixedDeltaTime;
         GroundCheck();
     }
     
@@ -103,7 +121,7 @@ public class MovementSystem : MonoBehaviour
         // Inputless
         if (nullMoveTime > 0.0f)
         {
-            nullMoveTime -= Time.deltaTime;
+            nullMoveTime -= Time.fixedDeltaTime;
             return;
         }
         
@@ -295,37 +313,42 @@ public class MovementSystem : MonoBehaviour
     // PHYSICS
     void Physics()
     {
-        _rb.velocity = _dir;
+        _velocity = _dir;
         
         // "Friction", applying x acceleration
-        if (_rb.velocity.x != 0)
+        if (_velocity.x != 0)
         {
-            float sign = Mathf.Sign(_rb.velocity.x);
-            _rb.velocity = new Vector2(_rb.velocity.x - sign * Mathf.Abs(_xFriction) * Time.deltaTime, _rb.velocity.y);
-            if (sign > 0 && _rb.velocity.x < 0)
+            float sign = Mathf.Sign(_velocity.x);
+            _velocity = new Vector2(_velocity.x - sign * Mathf.Abs(_xFriction) * Time.fixedDeltaTime, _velocity.y);
+            if (sign > 0 && _velocity.x < 0)
             {
-                _rb.velocity = new Vector2(0, _rb.velocity.y);
+                _velocity = new Vector2(0, _velocity.y);
             }
 
-            if (sign < 0 && _rb.velocity.x > 0)
+            if (sign < 0 && _velocity.x > 0)
             {
-                _rb.velocity = new Vector2(0, _rb.velocity.y);
+                _velocity = new Vector2(0, _velocity.y);
             }
         }
-        _rb.velocity = new Vector2(_rb.velocity.x + _xAcceleration * Time.deltaTime, _rb.velocity.y + _yAcceleration * Time.deltaTime);
+        _velocity = new Vector2(_velocity.x + _xAcceleration * Time.fixedDeltaTime, _velocity.y + _yAcceleration * Time.fixedDeltaTime);
         
         // Gravity
-        if(!_onGround) _rb.velocity = new Vector2(_rb.velocity.x, _rb.velocity.y - _gravity * Time.deltaTime);
+        if(!_onGround) _velocity = new Vector2(_velocity.x, _velocity.y - _gravity * Time.fixedDeltaTime);
         
         // Setting the Speed Cap
-        if (Mathf.Abs(_rb.velocity.x) > _xSpeedCap)
+        if (Mathf.Abs(_velocity.x) > _xSpeedCap)
         {
-            _rb.velocity = new Vector2(_xSpeedCap * Mathf.Sign(_rb.velocity.x), _rb.velocity.y);
+            _velocity = new Vector2(_xSpeedCap * Mathf.Sign(_velocity.x), _velocity.y);
         }
-        if (Mathf.Abs(_rb.velocity.y) > _ySpeedCap)
+        if (Mathf.Abs(_velocity.y) > _ySpeedCap)
         {
-            _rb.velocity = new Vector2(_rb.velocity.x, _ySpeedCap * Mathf.Sign(_rb.velocity.y));
+            _velocity = new Vector2(_velocity.x, _ySpeedCap * Mathf.Sign(_velocity.y));
         }
+
+        // Applying velocity
+        Vector2 targetPosition = _rb.position + _velocity * Time.fixedDeltaTime;
+        _rb.MovePosition(targetPosition);
+        
     }
     
     //------- COLLISION FUNCTIONS -------
