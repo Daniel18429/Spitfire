@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class StateMachine<T>
@@ -16,7 +15,6 @@ public class StateMachine<T>
     
     public void TransitionToType<TState>() where TState : State<T>
     {
-        Debug.Log("trANSITION");
         TransitionState(GetStateFromType<TState>());
     }
 
@@ -30,24 +28,28 @@ public class StateMachine<T>
     {
         if (CurrentState == nextState || nextState == null)
         {
-            Debug.Log(nextState);
             return;
         }
         State<T> lca = Lca(CurrentState, nextState);
         if(lca.ActiveChild != null) lca.ActiveChild.RecursiveExit();
         List<State<T>> path = lcaToNextState(lca, nextState);
-        Debug.Log("Still going");
         for (int i = 1; i < path.Count - 1; i++)
         {
-            Debug.Log("ENTERING");
             path[i].Enter();
         }
         nextState.RecursiveEnter();
+        CurrentState = nextState;
+        List<State<T>> temp = CurrentState.Leaf().PathToRoot();
+        string msg = "";
+        for (int i = 0; i < temp.Count; i++)
+        {
+            msg += temp[i] + "->";
+        }
+        Debug.Log(msg);
     }
 
     public void AddState(State<T> state)
     {
-        Debug.Log("Adding State");
         states.Add(state.GetType(), state);
     }
 
@@ -76,11 +78,15 @@ public class StateMachine<T>
 
     public void Update(float deltaTime)
     {
-        CurrentState.Update(deltaTime);
+        List<State<T>> path = CurrentState.PathToRoot();
+        path.Reverse();
+        foreach (var s in path) s.Update(deltaTime);
     }
-
+ 
     public void FixedUpdate(float fixedDeltaTime)
-    {
-        CurrentState.FixedUpdate(fixedDeltaTime);
+    {        
+        List<State<T>> path = CurrentState.PathToRoot();
+        path.Reverse();
+        foreach (var s in path) s.FixedUpdate(fixedDeltaTime);
     }
 }

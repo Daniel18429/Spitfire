@@ -28,7 +28,6 @@ public class Grounded : State<PlayerInfo>
 
     public override void Transition()
     {
-        Debug.Log(_info.ground);
         if (!_info.ground)
         {
             MachineTransition<Airborne>();

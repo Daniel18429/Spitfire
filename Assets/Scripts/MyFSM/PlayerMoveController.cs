@@ -31,14 +31,6 @@ public class PlayerMoveController : MonoBehaviour
     public void Update()
     {
         StateMachine1.Update(Time.deltaTime);
-        print(StateMachine1.CurrentState.Leaf());
-        List<State<PlayerInfo>> temp = StateMachine1.CurrentState.Leaf().PathToRoot();
-        string msg = "";
-        for (int i = 0; i < temp.Count; i++)
-        {
-            msg += temp[i] + "->";
-        }
-        print(msg);
     }
 
     public void FixedUpdate()

@@ -16,7 +16,6 @@ public class StateMachineBuilder<T>
 
     public void BuildTree(StateNode<T> root)
     {
-        Debug.Log(root.nodeType.ToString());
         CreateStateFromNode(root, null );
         
     }
