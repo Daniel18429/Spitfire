@@ -6,7 +6,7 @@ using UnityEngine;
 public class StateMachineBuilder<T>
 {
     private StateMachine<T> stateMachine;
-    private UltraState<T> ultraState;
+    private RootState<T> _rootState;
     private T info;
     public StateMachineBuilder(StateMachine<T> sM, T info)
     {
@@ -14,20 +14,17 @@ public class StateMachineBuilder<T>
         this.info = info;
     }
 
-    public void BuildTree(StateNode<T> root)
+    // Called on list of top level states, inserts Root State automatically
+    public void BuildTree(StateNode<T>[] children)
     {
-        CreateStateFromNode(root, null );
-        
+        StateNode<T> rootNode = new StateNode<T>(typeof(RootState<T>), children);
+        CreateStateFromNode(rootNode, null );
     }
 
     public void CreateStateFromNode(StateNode<T> n, State<T> parent)
     {
         State<T> currentState;
-        if(parent != null)  currentState = (State<T>)Activator.CreateInstance(n.nodeType,stateMachine,info,parent);
-        else
-        { 
-            currentState = (State<T>)Activator.CreateInstance(n.nodeType,stateMachine,info);
-        }
+        currentState = (State<T>)Activator.CreateInstance(n.nodeType,stateMachine,info,parent);
         foreach (StateNode<T> childNode in n.children)
         {
             CreateStateFromNode(childNode, currentState);
@@ -35,13 +32,13 @@ public class StateMachineBuilder<T>
     }
 }
 
-
+// Used to create a tree
 public class StateNode<T>
 {
     public Type nodeType { get; private set; }
     public List<StateNode<T>> children { get; private set; }= new List<StateNode<T>>();
 
-    public StateNode(Type nodeType, params StateNode<T>[] children)
+    public StateNode(Type nodeType, params StateNode<T>[] children )
     {
         this.nodeType = nodeType; 
         this.children = new List<StateNode<T>>(children);

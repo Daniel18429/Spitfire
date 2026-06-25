@@ -1,7 +1,4 @@
 ﻿
-
-using UnityEngine.UI;
-
 public class Idle : State<PlayerInfo>
 {
     public Idle(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)

@@ -15,16 +15,16 @@ public class PlayerMoveController : MonoBehaviour
 
     public void Start()
     {
-        StateNode<PlayerInfo> root = new StateNode<PlayerInfo>(typeof(UltraState<PlayerInfo>),
+        StateNode<PlayerInfo>[] children ={
             new StateNode<PlayerInfo>(typeof(Grounded),
                 new StateNode<PlayerInfo>(typeof(Idle)),
                 new StateNode<PlayerInfo>(typeof(Moving))),
             new StateNode<PlayerInfo>(typeof(Airborne),
                 new StateNode<PlayerInfo>(typeof(Jumping)),
                 new StateNode<PlayerInfo>(typeof(Falling)))
-            );
+            };
         StateMachineBuilder<PlayerInfo> build = new StateMachineBuilder<PlayerInfo>(StateMachine1, PlayerInfo1);
-        build.BuildTree(root);
+        build.BuildTree(children);
         StateMachine1.Initialize(StateMachine1.GetStateFromType<Grounded>());
     }
  

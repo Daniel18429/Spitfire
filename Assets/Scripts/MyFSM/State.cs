@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
+// Controls what is happening in each state and where to go on a transition
 public abstract class State<T>
 {
+    // VARIABLES
     public readonly State<T> Parent;
-    public State<T> ActiveChild { get; private set; }
+    public State<T> ActiveChild { get; private set; } // Null == Leaf Node
     protected StateMachine<T> Machine { get; private set; }
-    protected T _info;
+    protected T _info; // Instance of context state has access to
+    
     
     protected State(StateMachine<T> machine, T info, State<T> parent = null)
     {
@@ -18,21 +20,24 @@ public abstract class State<T>
         _info = info;
     }
     
-    protected virtual void OnEnter(){}
-    protected virtual void OnExit(){}
-    protected virtual void OnUpdate(float deltaTime){}
-    protected virtual void OnFixedUpdate(float deltaTime){}
-    protected virtual State<T> GetInitialState() => null;
-    public virtual void Transition()
-    {
-    }
+    // FUNCTIONS THAT CAN BE OVERRIDDEN BY CHILDREN
+    protected virtual void OnEnter(){} // What happens on entering the state
+    protected virtual void OnExit(){} // What happens on exiting the state
+    protected virtual void OnUpdate(float deltaTime){} // What happens on update in the state
+    protected virtual void OnFixedUpdate(float deltaTime){} // What happens on fixed update in the state (physics)
+    protected virtual State<T> GetInitialState() => null; // What is the assumed active child (Null == set this as leaf)
 
+    public virtual void Transition() {} // Under what conditions does this state move to another
+    // Transition() filled with MachineTransition<TState>()
+
+    // Enter only this state
     public void Enter()
     {
         if(Parent != null) Parent.ActiveChild = this;
         OnEnter();
     }
 
+    // Enter this state and activate children through assumptions
     public void RecursiveEnter()
     {
         Enter();
@@ -43,18 +48,21 @@ public abstract class State<T>
         }
     }
 
+    // Never used
     public void Exit()
     {
         if(Parent != null) Parent.ActiveChild = null;
         OnExit();
     }
 
+    // Exit out this state and all active children
     public void RecursiveExit() // Recursively exit CHILDREN. Only needs to be called once on the Active Child of the LCA
     {
         if(ActiveChild != null) ActiveChild.RecursiveExit();
         Exit();
     }
 
+    // Reimplement transition logic
     protected void MachineTransition<TState>() where TState : State<T>
     {
         Machine.TransitionToType<TState>();
@@ -65,17 +73,16 @@ public abstract class State<T>
     {
         OnUpdate(deltaTime);
         ActiveChild?.Update(deltaTime);
-        Transition();
     }
 
     public void FixedUpdate(float deltaTime)
     {
         OnFixedUpdate(deltaTime);
-        ActiveChild?.FixedUpdate(deltaTime);
         Transition();
+        ActiveChild?.FixedUpdate(deltaTime);
     }
     
-
+    // Get active leaf
     public State<T> Leaf()
     {
         State<T> s = this;
@@ -83,6 +90,7 @@ public abstract class State<T>
         return s;
     }
     
+    // Get path to root (Leaf = 0, Root = end)
     public List<State<T>> PathToRoot()
     {
         List<State<T>> path = new List<State<T>>();
