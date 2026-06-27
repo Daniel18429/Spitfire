@@ -5,9 +5,15 @@ public class Idle : State<PlayerInfo>
     {
     }
 
-    public override void Transition()
+    protected override State<PlayerInfo> Transition()
     {
-        if (_info.moving) MachineTransition<Moving>();
+        if(_info.moving) return Machine.GetStateFromType<Moving>();
+        return null;
+    }
+
+    protected void OnUpdate()
+    {
+        
     }
 }
 
@@ -17,8 +23,9 @@ public class Moving : State<PlayerInfo>
     {
     }
 
-    public override void Transition()
+    protected override State<PlayerInfo> Transition()
     {
-        if (!_info.moving) MachineTransition<Idle>();
+        if (!_info.moving) return Machine.GetStateFromType<Idle>();
+        return null;
     }
 }

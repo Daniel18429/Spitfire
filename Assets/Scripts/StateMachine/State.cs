@@ -27,8 +27,8 @@ public abstract class State<T>
     protected virtual void OnFixedUpdate(float deltaTime){} // What happens on fixed update in the state (physics)
     protected virtual State<T> GetInitialState() => null; // What is the assumed active child (Null == set this as leaf)
 
-    public virtual void Transition() {} // Under what conditions does this state move to another
-    // Transition() filled with MachineTransition<TState>()
+    protected virtual State<T> Transition() => null; // Under what conditions does this state move to another
+    
 
     // Enter only this state
     public void Enter()
@@ -61,12 +61,6 @@ public abstract class State<T>
         if(ActiveChild != null) ActiveChild.RecursiveExit();
         Exit();
     }
-
-    // Reimplement transition logic
-    protected void MachineTransition<TState>() where TState : State<T>
-    {
-        Machine.TransitionToType<TState>();
-    }
     
 
     public void Update(float deltaTime)
@@ -78,8 +72,20 @@ public abstract class State<T>
     public void FixedUpdate(float deltaTime)
     {
         OnFixedUpdate(deltaTime);
-        Transition();
         ActiveChild?.FixedUpdate(deltaTime);
+    }
+
+    public State<T> CallTransition()
+    {
+        State<T> selfTransition = Transition();
+        if(selfTransition != null) return selfTransition;
+        if (ActiveChild != null)
+        {
+            State<T> childTransition = ActiveChild.CallTransition();
+            if (childTransition != null) return childTransition;
+        }
+
+        return null;
     }
     
     // Get active leaf

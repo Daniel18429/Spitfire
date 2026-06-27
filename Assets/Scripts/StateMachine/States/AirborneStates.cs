@@ -9,9 +9,10 @@ public class Falling : State<PlayerInfo>
     {
     }
 
-    public override void Transition()
+    protected override State<PlayerInfo> Transition()
     {
-        if (_info.jumping) MachineTransition<Jumping>();
+        if (_info.jumping) return Machine.GetStateFromType<Jumping>();
+        return null;
     }
 
 }
@@ -22,8 +23,9 @@ public class Jumping : State<PlayerInfo>
     {
     }
 
-    public override void Transition()
+    protected override State<PlayerInfo> Transition()
     {
-        if (!_info.jumping) MachineTransition<Falling>();
+        if (!_info.jumping) return Machine.GetStateFromType<Falling>();
+        return null;
     }
 }

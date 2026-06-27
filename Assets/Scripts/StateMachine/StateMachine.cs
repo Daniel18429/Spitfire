@@ -10,18 +10,28 @@ public class StateMachine<T>
     
     // Dictionary to easily swap to states from typing. Contains all states under state machine instance
     private Dictionary<System.Type, State<T>> states = new Dictionary<System.Type, State<T>>();
+    private bool midTransition = false;
     
     // Called upon creation of state machine
     // BUG FIX: ENTER ALL STATES CORRECTLY
     public void Initialize(State<T> initialState)
     {
+        List<State<T>> path = lcaToNextState(Root, initialState);
+        for (int i = 1; i < path.Count - 1; i++)
+        {
+            path[i].Enter();
+        }
+        initialState.RecursiveEnter();
+        CurrentState = initialState;
+        List<State<T>> temp = CurrentState.Leaf().PathToRoot();
+        string msg = "";
+        for (int i = 0; i < temp.Count; i++)
+        {
+            msg += temp[i] + "->";
+        }
+        Debug.Log(msg);
         CurrentState = initialState;
         initialState.RecursiveEnter();
-    }
-    
-    public void TransitionToType<TState>() where TState : State<T>
-    {
-        TransitionState(GetStateFromType<TState>());
     }
 
     public State<T> GetStateFromType<TState>() where TState : State<T> // Returns state instance from sm dictionary
@@ -96,7 +106,13 @@ public class StateMachine<T>
     }
  
     public void FixedUpdate(float fixedDeltaTime)
-    {        
+    {
+        State<T> nextState = Root.CallTransition();
+        while (nextState != null)
+        {
+            TransitionState(nextState);
+            nextState = Root.CallTransition();
+        }        
         Root.FixedUpdate(fixedDeltaTime);
     }
 }

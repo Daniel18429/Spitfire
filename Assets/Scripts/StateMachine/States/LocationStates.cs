@@ -14,9 +14,10 @@ public class Airborne : State<PlayerInfo>
         return Machine.GetStateFromType<Jumping>();
     }
 
-    public override void Transition()
+    protected override State<PlayerInfo> Transition()
     {
-        if (_info.ground) MachineTransition<Grounded>();
+        if (_info.ground) return Machine.GetStateFromType<Grounded>();
+        return null;
     }
 }
 
@@ -26,11 +27,12 @@ public class Grounded : State<PlayerInfo>
     {
     }
 
-    public override void Transition()
+    protected override State<PlayerInfo> Transition()
     {
-        if (!_info.ground)
+        if(!_info.ground) return Machine.GetStateFromType<Airborne>();
+        else
         {
-            MachineTransition<Airborne>();
+            return null;
         }
     }
     
