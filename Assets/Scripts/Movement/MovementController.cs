@@ -2,21 +2,27 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    private PlayerInfo _playerInfo;
-    private StateMachine<PlayerInfo> _stateMachine = new StateMachine<PlayerInfo>();
+    [SerializeField] private PlayerInfo _playerInfo;
+    [SerializeField] private StateMachine<PlayerInfo> _stateMachine = new StateMachine<PlayerInfo>();
     
     public void Awake()
     {
         _playerInfo = new PlayerInfo(this.gameObject);
+        _playerInfo.Init();
         StateNode<PlayerInfo>[] children =
         {
-            new StateNode<PlayerInfo>(typeof(Idle)),
-            new StateNode<PlayerInfo>(typeof(Walking)),
+            new StateNode<PlayerInfo>(typeof(Grounded),
+                new StateNode<PlayerInfo>(typeof(Idle)),
+                new StateNode<PlayerInfo>(typeof(Walking))
+                ),
+            new StateNode<PlayerInfo>(typeof(Airborne),
+                new StateNode<PlayerInfo>(typeof(Jumping)),
+                new StateNode<PlayerInfo>(typeof(Falling)))
         };
         StateMachineBuilder<PlayerInfo> builder = new StateMachineBuilder<PlayerInfo>(_stateMachine, _playerInfo);
         builder.BuildTree(children);
         _stateMachine.Initialize(_stateMachine.GetStateFromType<Walking>());
-    }
+    } 
 
     public void Start()
     {
@@ -33,6 +39,7 @@ public class MovementController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        _playerInfo.Context.UpdateContext(this.gameObject);
         _stateMachine.FixedUpdate(Time.fixedDeltaTime);
         _playerInfo.Physics.PhysicsUpdate(Time.fixedDeltaTime);
         _playerInfo.Input.Reset();

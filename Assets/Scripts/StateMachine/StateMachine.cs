@@ -5,12 +5,11 @@ using UnityEngine;
 // Controller of the states
 public class StateMachine<T>
 {
-    public State<T> CurrentState { get; private set; } // The current state (current state may have active children)
+    [SerializeField] public State<T> CurrentState { get; private set; } // The current state (current state may have active children)
     private State<T> Root { get; set; } // Empty state for controlling transitions and updates
     
     // Dictionary to easily swap to states from typing. Contains all states under state machine instance
     private Dictionary<System.Type, State<T>> states = new Dictionary<System.Type, State<T>>();
-    private bool midTransition = false;
     
     // Called upon creation of state machine
     // BUG FIX: ENTER ALL STATES CORRECTLY

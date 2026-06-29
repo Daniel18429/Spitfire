@@ -9,6 +9,8 @@ public class Template : State<PlayerInfo>
     protected override void OnExit() { }
 
     protected override State<PlayerInfo> Transition() => null;
+    
+    protected override State<PlayerInfo> GetInitialState() => null;
 
     protected override void OnUpdate(float deltaTime) { }
     protected override void OnFixedUpdate(float deltaTime) { }

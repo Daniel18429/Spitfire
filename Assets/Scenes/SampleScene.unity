@@ -778,10 +778,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1449469801}
+  - component: {fileID: 1449469802}
   - component: {fileID: 1449469800}
   - component: {fileID: 1449469799}
-  - component: {fileID: 1449469802}
-  - component: {fileID: 1449469798}
   - component: {fileID: 1449469797}
   m_Layer: 0
   m_Name: Player
@@ -825,23 +824,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &1449469798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1449469796}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd3d40dfc713a9a4eb84d226f7eb6325, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _state: 4
-  _onGround: 0
-  _xAcceleration: 0
-  _yAcceleration: 0
-  _cayoteTime: 0
 --- !u!50 &1449469799
 Rigidbody2D:
   serializedVersion: 4
@@ -856,7 +838,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -946,14 +928,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1449469796}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d8bdc91520b4d1ab9dbcd3e3bf30a27, type: 3}
+  m_Script: {fileID: 11500000, guid: 03156e9cacfc499aa7eaa6b1f13c489a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerInfo1:
-    ground: 0
-    dead: 0
-    jumping: 0
-    moving: 0
 --- !u!1 &1476293278
 GameObject:
   m_ObjectHideFlags: 0

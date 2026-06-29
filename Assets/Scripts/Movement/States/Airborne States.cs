@@ -1,10 +1,15 @@
+using UnityEngine;
 public class Falling : State<PlayerInfo>
 {
+    private float gravity = 14f;
     public Falling(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
     }
-    
-    protected override void OnEnter() { }
+
+    protected override void OnEnter()
+    {
+        _info.Physics.Gravity = gravity;
+    }
     
     protected override void OnExit() { }
 
@@ -18,15 +23,23 @@ public class Falling : State<PlayerInfo>
 public class Jumping : State<PlayerInfo>
 {
     private MyTimer _jumpDurationTimer = new MyTimer();
-    private float _jumpDuration;
-    private float _jumpForce;
+    private float _jumpDuration = 1;
+    private float _jumpForce = 10f;
+    private float gravity = 10f;
     public Jumping(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
     }
 
     protected override void OnEnter()
     {
+        _info.Context.IsGrounded = false; // MAKING SURE WE DON'T RESET
+        
         _jumpDurationTimer.Reset(_jumpDuration);
+        Vector2 velocity = _info.Physics.Rigidbody2D.velocity;
+        velocity.y = _jumpForce;
+        _info.Physics.Rigidbody2D.velocity = velocity;
+
+        _info.Physics.Gravity = gravity;
     }
 
     protected override void OnExit()
