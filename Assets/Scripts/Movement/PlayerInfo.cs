@@ -10,8 +10,10 @@ public class PlayerInfo
     public PlayerTimers Timers;
     public PlayerFire Fire;
     public PlayerCost Cost;
+    public GameObject Player;
     public PlayerInfo(GameObject gameObject)
     {
+        Player = gameObject;
         Physics = new PlayerPhysics(gameObject.GetComponent<Rigidbody2D>());
         Input = new PlayerInput();
         Context = new PlayerContext();
@@ -23,6 +25,7 @@ public class PlayerInfo
     public void Init()
     {
         Context.Init();
+        Input.__init__(Player.transform);
     }
 }
 
@@ -35,15 +38,26 @@ public class PlayerCost
 
 public class PlayerInput
 {
+    public Vector2 mouseDir;
+    private Transform objToMouse;
     public Vector2 MoveDirection; 
     public bool JumpPressed;
     public bool DashPressed;
+
+    public void __init__(Transform _obj)
+    {
+        objToMouse = _obj;
+    }
 
     public void CacheInput(Vector2 moveDirection, bool jumpPressed, bool dashPressed)
     {
         MoveDirection = moveDirection;
         if(!JumpPressed) JumpPressed = jumpPressed;
         if (!DashPressed) DashPressed = dashPressed;
+        
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos.z = 0;
+        mouseDir = (mouseWorldPos - objToMouse.position).normalized;
     }
 
     public void Reset()

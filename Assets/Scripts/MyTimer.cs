@@ -13,6 +13,7 @@ public class MyTimer
 
     public void Reset(float deltaTime)
     {
+        Done = false;
         TimeRemaining = deltaTime;
     }
 }

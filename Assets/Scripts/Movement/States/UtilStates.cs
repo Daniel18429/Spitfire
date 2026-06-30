@@ -54,6 +54,33 @@ public class HorizontalMove : State<PlayerInfo>
         }
         _info.Physics.Rigidbody2D.velocity = vel;
     }
+}
+
+public class Dash : State<PlayerInfo>
+{
+    private Vector2 _dashDir;
+    private float _dashSpeed;
+    private float _dashTime;
     
+    public Dash(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
+    {
+    }
+
+    protected override void OnEnter()
+    {
+        _dashDir = _info.Input.mouseDir;
+    }
     
+    protected override void OnExit() { }
+
+    protected override State<PlayerInfo> Transition() => null;
+    
+    protected override State<PlayerInfo> GetInitialState() => null;
+
+    protected override void OnUpdate(float deltaTime) { }
+
+    protected override void OnFixedUpdate(float deltaTime)
+    {
+        
+    }
 }

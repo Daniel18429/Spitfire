@@ -12,27 +12,25 @@ public class Falling : HorizontalMove
     {
         _info.Physics.Gravity = gravity;
     }
-    
     protected override void OnExit() { }
-
     protected override State<PlayerInfo> Transition() => null;
-    
 }
 
-public class Jumping : State<PlayerInfo>
+public class Jumping : HorizontalMove
 {
     private MyTimer _jumpDurationTimer = new MyTimer();
-    private float _jumpDuration = 0.2f;
+    private float _jumpDuration = 1.2f;
     private float _jumpForce = 10f;
     private float gravity = 10f;
     public Jumping(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
+        moveSpeed = 5f;
+        slowDown = 0.5f;
     }
 
     protected override void OnEnter()
     {
-        _info.Context.IsGrounded = false; // MAKING SURE WE DON'T RESET
-        
+        _info.Context.IsGrounded = false; // MAKING SURE WE DON'T RESET INTO INFINITE CYCLE
         _jumpDurationTimer.Reset(_jumpDuration);
         Vector2 velocity = _info.Physics.Rigidbody2D.velocity;
         velocity.y = _jumpForce;
@@ -62,6 +60,7 @@ public class Jumping : State<PlayerInfo>
 
     protected override void OnFixedUpdate(float deltaTime)
     {
-        
+        base.OnFixedUpdate(deltaTime);
+        _jumpDurationTimer.Tick(deltaTime);
     }
 }
