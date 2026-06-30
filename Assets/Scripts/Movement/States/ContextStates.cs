@@ -1,6 +1,9 @@
+using UnityEngine;
+
 public class Grounded : State<PlayerInfo>
 {
     private float jumpCost = 10f;
+    private float slideCost = 10f;
     public Grounded(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
     }
@@ -20,9 +23,13 @@ public class Grounded : State<PlayerInfo>
         }
         else
         {
-            if (_info.Input.JumpPressed && _info.Fire.Consume(jumpCost))
+            if (_info.Input.JumpPressed && _info.Fire.HasFlame(_info.Cost.JumpCost))
             {
                 return Machine.GetStateFromType<Jumping>();
+            }
+            else if (_info.Input.DashPressed && _info.Fire.HasFlame(_info.Cost.DashCost))
+            {
+                return Machine.GetStateFromType<Sliding>();
             }
             else
             {

@@ -13,7 +13,8 @@ public class MovementController : MonoBehaviour
         {
             new StateNode<PlayerInfo>(typeof(Grounded),
                 new StateNode<PlayerInfo>(typeof(Idle)),
-                new StateNode<PlayerInfo>(typeof(Walking))
+                new StateNode<PlayerInfo>(typeof(Walking)),
+                new StateNode<PlayerInfo>(typeof(Sliding))
                 ),
             new StateNode<PlayerInfo>(typeof(Airborne),
                 new StateNode<PlayerInfo>(typeof(Jumping)),

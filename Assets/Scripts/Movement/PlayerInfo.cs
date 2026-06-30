@@ -9,6 +9,7 @@ public class PlayerInfo
     public PlayerPhysics Physics;
     public PlayerTimers Timers;
     public PlayerFire Fire;
+    public PlayerCost Cost;
     public PlayerInfo(GameObject gameObject)
     {
         Physics = new PlayerPhysics(gameObject.GetComponent<Rigidbody2D>());
@@ -16,12 +17,20 @@ public class PlayerInfo
         Context = new PlayerContext();
         Timers = new PlayerTimers();
         Fire = gameObject.GetComponent<PlayerFire>();
+        Cost = new PlayerCost();
     }
 
     public void Init()
     {
         Context.Init();
     }
+}
+
+public class PlayerCost
+{
+    public float DashCost { get; private set; } = 5f;
+    public float JumpCost { get; private set; } = 1f;
+
 }
 
 public class PlayerInput
@@ -66,7 +75,6 @@ public class PlayerContext
     public RaycastHit2D WallHit;
     public Vector2 GroundNormal;
     public Vector2 WallNormal;
-
     public LayerMask CollisionMask;
 
     public PlayerContext()
@@ -119,8 +127,7 @@ public class PlayerPhysics
     public float Gravity = 9.8f;
     public float SpeedCap = 20f;
     public float YMax;
-    public float XFriction;
-    public float YFriction;
+    public float Friction = 0.1f;
 
     public void PhysicsUpdate(float deltaTime)
     {
@@ -130,6 +137,27 @@ public class PlayerPhysics
         {
             Rigidbody2D.velocity = Vector2.ClampMagnitude(Rigidbody2D.velocity, SpeedCap);
         }
-        
+
+        if (Rigidbody2D.velocity.x != 0)
+        {
+            int xVelocitySign =  Math.Sign(Rigidbody2D.velocity.x);
+            
+            Vector2 velocity = Rigidbody2D.velocity;
+            if (xVelocitySign == 1)
+            {
+                velocity.x -= Friction;
+            }
+            else
+            {
+                velocity.x += Friction;
+            }
+            Rigidbody2D.velocity = velocity;
+
+            if (Math.Sign(Rigidbody2D.velocity.x) != xVelocitySign)
+            {
+                Rigidbody2D.velocity = new Vector2(0, Rigidbody2D.velocity.y);
+            }
+            
+        }
     }
 }

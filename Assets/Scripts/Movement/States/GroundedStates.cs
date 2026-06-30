@@ -65,9 +65,10 @@ public class Sliding : State<PlayerInfo>
 
     protected override void OnEnter()
     {
+        _info.Fire.Consume(_info.Cost.DashCost);
         if (_info.Context.GroundNormal.x == 0)
         {
-            tangent = Vector2.up;
+            tangent = Vector2.zero;
         }
         else if (_info.Context.GroundNormal.x > 0)
         {
@@ -96,6 +97,14 @@ public class Sliding : State<PlayerInfo>
     }
     protected override State<PlayerInfo> GetInitialState() => null;
 
-    protected override void OnUpdate(float deltaTime) { }
-    protected override void OnFixedUpdate(float deltaTime) { }
+    protected override void OnUpdate(float deltaTime)
+    {
+    }
+
+    protected override void OnFixedUpdate(float deltaTime)
+    {
+        Vector2 velocity = _info.Physics.Rigidbody2D.velocity;
+        velocity += tangent * Mathf.Abs(tangent.y);
+        _info.Physics.Rigidbody2D.velocity = velocity;
+    }
 }

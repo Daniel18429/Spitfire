@@ -54,28 +54,19 @@ public class Fire : MonoBehaviour
         Adjust(amount * deltaTime);
     }
     
-    public bool Consume(float amount)
+    public void Consume(float amount)
     {
-        if(amount <= 0) throw new System.ArgumentException("amount must be greater than or equal to 0");
-        if(Flame >= amount)
-        {
-            Adjust(-amount);
-            return true;
-        }
-
-        return false;
+        Adjust(-amount);
     }
 
-    public bool Consume(float amount, float deltaTime)
+    public void Consume(float amount, float deltaTime)
     {
-        
-        if(amount <= 0) throw new System.ArgumentException("amount must be greater than or equal to 0");
-        if (Flame >= amount * deltaTime)
-        {
-            Adjust(-amount * deltaTime);
-            return true;
-        }
-        return false;
+        Adjust(-amount * deltaTime);
+    }
+
+    public bool HasFlame(float amount)
+    {
+        return Flame >= amount;
     }
     
     public virtual void Extinguish()

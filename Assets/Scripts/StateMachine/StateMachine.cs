@@ -107,7 +107,7 @@ public class StateMachine<T>
     public void FixedUpdate(float fixedDeltaTime)
     {
         State<T> nextState = Root.CallTransition();
-        while (nextState != null)
+        while (nextState != null && nextState != CurrentState)
         {
             TransitionState(nextState);
             nextState = Root.CallTransition();
