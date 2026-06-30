@@ -10,7 +10,7 @@ public class Grounded : State<PlayerInfo>
 
     protected override void OnEnter()
     {
-        
+        _info.Physics.Friction = 0.06f;
     }
     
     protected override void OnExit() { }
@@ -52,8 +52,11 @@ public class Airborne : State<PlayerInfo>
     public Airborne(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
     }
-    
-    protected override void OnEnter() { }
+
+    protected override void OnEnter()
+    {
+        _info.Physics.Friction = 0.02f;
+    }
     
     protected override void OnExit() { }
 

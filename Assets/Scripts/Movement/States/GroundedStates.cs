@@ -23,11 +23,12 @@ public class Idle : State<PlayerInfo>
     protected override void OnFixedUpdate(float deltaTime) { }
 }
 
-public class Walking : State<PlayerInfo>
+public class Walking : HorizontalMove
 {
-    private float _walkSpeed = 5.0f;
     public Walking(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
+        moveSpeed = 5.0f;
+        slowDown = 1.5f;
     }
 
     protected override void OnEnter()
@@ -43,15 +44,6 @@ public class Walking : State<PlayerInfo>
         {
             return null;
         }
-    }
-
-    protected override void OnUpdate(float deltaTime) { }
-
-    protected override void OnFixedUpdate(float deltaTime)
-    {
-        Vector2 velocity = _info.Physics.Rigidbody2D.velocity;
-        velocity.x = _info.Input.MoveDirection.x * _walkSpeed;
-        _info.Physics.Rigidbody2D.velocity = velocity;
     }
 }
 

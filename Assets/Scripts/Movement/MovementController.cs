@@ -44,6 +44,5 @@ public class MovementController : MonoBehaviour
         _stateMachine.FixedUpdate(Time.fixedDeltaTime);
         _playerInfo.Physics.PhysicsUpdate(Time.fixedDeltaTime);
         _playerInfo.Input.Reset();
-        
     }
 }

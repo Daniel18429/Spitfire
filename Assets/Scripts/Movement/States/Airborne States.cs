@@ -1,9 +1,11 @@
 using UnityEngine;
-public class Falling : State<PlayerInfo>
+public class Falling : HorizontalMove
 {
     private float gravity = 14f;
     public Falling(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
+        moveSpeed = 5f;
+        slowDown = 0.5f;
     }
 
     protected override void OnEnter()
@@ -14,16 +16,13 @@ public class Falling : State<PlayerInfo>
     protected override void OnExit() { }
 
     protected override State<PlayerInfo> Transition() => null;
-
-    protected override void OnUpdate(float deltaTime) { }
-    protected override void OnFixedUpdate(float deltaTime) { }
     
 }
 
 public class Jumping : State<PlayerInfo>
 {
     private MyTimer _jumpDurationTimer = new MyTimer();
-    private float _jumpDuration = 1;
+    private float _jumpDuration = 0.2f;
     private float _jumpForce = 10f;
     private float gravity = 10f;
     public Jumping(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
