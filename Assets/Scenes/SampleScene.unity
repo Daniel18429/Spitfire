@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 49904419}
   - component: {fileID: 49904418}
   - component: {fileID: 49904417}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 241586711}
   - component: {fileID: 241586710}
   - component: {fileID: 241586709}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Ground (2)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -478,7 +478,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -779,10 +779,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1449469801}
   - component: {fileID: 1449469802}
+  - component: {fileID: 1449469803}
   - component: {fileID: 1449469800}
   - component: {fileID: 1449469799}
   - component: {fileID: 1449469797}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -931,6 +932,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03156e9cacfc499aa7eaa6b1f13c489a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerInfo:
+    Context:
+      IsGrounded: 0
+      OnWall: 0
+      LeftWall: 0
+      RightWall: 0
+      GroundNormal: {x: 0, y: 0}
+      WallNormal: {x: 0, y: 0}
+      CollisionMask:
+        serializedVersion: 2
+        m_Bits: 0
+    Fire: {fileID: 0}
+--- !u!114 &1449469803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449469796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 888ce58b36a848c2b677c8d9829b39b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flame: 0
+  extinguished: 0
 --- !u!1 &1476293278
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,7 +1053,7 @@ GameObject:
   - component: {fileID: 1856592750}
   - component: {fileID: 1856592749}
   - component: {fileID: 1856592748}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Ground (1)
   m_TagString: Ground
   m_Icon: {fileID: 0}

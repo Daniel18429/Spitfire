@@ -8,12 +8,14 @@ public class PlayerInfo
     public PlayerContext Context;
     public PlayerPhysics Physics;
     public PlayerTimers Timers;
+    public PlayerFire Fire;
     public PlayerInfo(GameObject gameObject)
     {
         Physics = new PlayerPhysics(gameObject.GetComponent<Rigidbody2D>());
         Input = new PlayerInput();
         Context = new PlayerContext();
         Timers = new PlayerTimers();
+        Fire = gameObject.GetComponent<PlayerFire>();
     }
 
     public void Init()

@@ -1,5 +1,6 @@
 public class Grounded : State<PlayerInfo>
 {
+    private float jumpCost = 10f;
     public Grounded(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
     }
@@ -19,7 +20,7 @@ public class Grounded : State<PlayerInfo>
         }
         else
         {
-            if (_info.Input.JumpPressed)
+            if (_info.Input.JumpPressed && _info.Fire.Consume(jumpCost))
             {
                 return Machine.GetStateFromType<Jumping>();
             }
