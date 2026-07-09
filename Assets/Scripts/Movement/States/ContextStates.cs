@@ -104,11 +104,12 @@ public class Airborne : State<PlayerInfo>
     protected override void OnFixedUpdate(float deltaTime) { }
 }
 
-public class Walled : State<PlayerInfo>
+public class Walled : HorizontalMove
 {
     private float _slideSpeed = 2f;
     public Walled(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
+        moveSpeed = 1;
     }
 
     protected override void OnEnter()

@@ -15,13 +15,27 @@ public class Falling : HorizontalMove
     protected override State<PlayerInfo> Transition() => null;
 }
 
-public class Jumping : HorizontalMove
+public class Jumping : State<PlayerInfo>
+{
+    public Jumping(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
+    {
+    }
+
+    protected override State<PlayerInfo> GetInitialState()
+    {
+        return Machine.GetStateFromType<NormalJump>();
+    }
+    
+}
+
+
+public class NormalJump : HorizontalMove
 {
     private MyTimer _jumpDurationTimer = new MyTimer();
     private float _jumpDuration = 1.2f;
     private float _jumpForce = 10f;
     private float gravity = 10f;
-    public Jumping(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
+    public NormalJump(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
         moveSpeed = 5f;
     }

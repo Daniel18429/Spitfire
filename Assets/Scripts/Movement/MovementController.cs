@@ -19,7 +19,8 @@ public class MovementController : MonoBehaviour
                 new StateNode<PlayerInfo>(typeof(Sliding))
                 ),
             new StateNode<PlayerInfo>(typeof(Airborne),
-                new StateNode<PlayerInfo>(typeof(Jumping)),
+                new StateNode<PlayerInfo>(typeof(Jumping),
+                    new StateNode<PlayerInfo>(typeof(NormalJump))),
                 new StateNode<PlayerInfo>(typeof(Falling)))
         };
         StateMachineBuilder<PlayerInfo> builder = new StateMachineBuilder<PlayerInfo>(_stateMachine, _playerInfo);
