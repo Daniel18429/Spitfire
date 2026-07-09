@@ -5,7 +5,6 @@ public class Falling : HorizontalMove
     public Falling(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
         moveSpeed = 5f;
-        slowDown = 0.5f;
     }
 
     protected override void OnEnter()
@@ -25,7 +24,6 @@ public class Jumping : HorizontalMove
     public Jumping(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
         moveSpeed = 5f;
-        slowDown = 0.5f;
     }
 
     protected override void OnEnter()

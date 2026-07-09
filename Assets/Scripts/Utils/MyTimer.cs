@@ -1,7 +1,7 @@
 public class MyTimer
 {
     public float TimeRemaining { get; private set; }
-    public bool Done;
+    public bool Done = false;
     public void Tick(float deltaTime)
     {
         TimeRemaining -= deltaTime;

@@ -11,6 +11,8 @@ public class PlayerInfo
     public PlayerFire Fire;
     public PlayerCost Cost;
     public GameObject Player;
+    
+    
     public PlayerInfo(GameObject gameObject)
     {
         Player = gameObject;
@@ -27,13 +29,21 @@ public class PlayerInfo
         Context.Init();
         Input.__init__(Player.transform);
     }
+
+    public void Update(float deltaTime)
+    {
+        Physics.PhysicsUpdate(deltaTime);
+        Timers.Tick(deltaTime);
+        Context.UpdateContext(Player);
+        Input.Reset();
+    }
 }
 
 public class PlayerCost
 {
     public float DashCost { get; private set; } = 5f;
     public float JumpCost { get; private set; } = 1f;
-
+    public float SlideCost { get; private set; } = 1f;
 }
 
 public class PlayerInput
@@ -43,17 +53,19 @@ public class PlayerInput
     public Vector2 MoveDirection; 
     public bool JumpPressed;
     public bool DashPressed;
+    public bool SlidePressed;
 
     public void __init__(Transform _obj)
     {
         objToMouse = _obj;
     }
 
-    public void CacheInput(Vector2 moveDirection, bool jumpPressed, bool dashPressed)
+    public void CacheInput(Vector2 moveDirection, bool jumpPressed, bool dashPressed, bool slidePressed)
     {
         MoveDirection = moveDirection;
         if(!JumpPressed) JumpPressed = jumpPressed;
         if (!DashPressed) DashPressed = dashPressed;
+        if(!SlidePressed) SlidePressed = slidePressed;
         
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPos.z = 0;
@@ -65,16 +77,19 @@ public class PlayerInput
         MoveDirection = Vector2.zero;
         JumpPressed = false;
         DashPressed = false;
+        SlidePressed = false;
     }
 }
 
 public class PlayerTimers
 {
-    private MyTimer CayoteTime;
+    public MyTimer CayoteTime = new MyTimer();
+    public MyTimer DashCooldown = new MyTimer();
 
     public void Tick(float deltaTime)
     {
         CayoteTime.Tick(deltaTime);
+        DashCooldown.Tick(deltaTime);
     }
 }
 

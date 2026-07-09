@@ -27,8 +27,7 @@ public class Walking : HorizontalMove
 {
     public Walking(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
-        moveSpeed = 5.0f;
-        slowDown = 1.5f;
+        moveSpeed = 8.0f;
     }
 
     protected override void OnEnter()
@@ -51,6 +50,7 @@ public class Walking : HorizontalMove
 public class Sliding : State<PlayerInfo>
 {
     private Vector2 tangent;
+    private float stopForce = 0.5f;
     public Sliding(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
     }
@@ -78,7 +78,7 @@ public class Sliding : State<PlayerInfo>
 
     protected override State<PlayerInfo> Transition()
     {
-        if (!_info.Input.DashPressed)
+        if (_info.Input.DashPressed || Mathf.Abs(_info.Physics.Rigidbody2D.velocity.x) < 5.0f)
         {
             return Machine.GetStateFromType<Walking>();
         }
@@ -95,8 +95,15 @@ public class Sliding : State<PlayerInfo>
 
     protected override void OnFixedUpdate(float deltaTime)
     {
-        Vector2 velocity = _info.Physics.Rigidbody2D.velocity;
-        velocity += tangent * Mathf.Abs(tangent.y);
-        _info.Physics.Rigidbody2D.velocity = velocity;
+        if (_info.Input.MoveDirection.x == 0 || Mathf.Sign(_info.Input.MoveDirection.x) == Mathf.Sign(_info.Physics.Rigidbody2D.velocity.x))
+        {
+            Vector2 velocity = _info.Physics.Rigidbody2D.velocity;
+            velocity += tangent * Mathf.Abs(tangent.y);
+            _info.Physics.Rigidbody2D.velocity = velocity;
+        }
+        else
+        {
+            
+        }
     }
 }

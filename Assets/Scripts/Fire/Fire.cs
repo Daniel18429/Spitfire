@@ -31,7 +31,6 @@ public class Fire : MonoBehaviour
             PlayerFire fire = obj.GetComponent<PlayerFire>();
             if (fire != null)
             {
-                Debug.Log(fire.name);
                 float dist =  Vector2.Distance(fire.transform.position, transform.position);
                 if (dist <= innerRadius)
                 {

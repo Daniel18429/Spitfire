@@ -5,7 +5,6 @@ public class HorizontalMove : State<PlayerInfo>
 {
     protected float moveSpeed;
     protected float maxMoveSpeed = Mathf.Infinity;
-    protected float slowDown;
     public HorizontalMove(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
     }
@@ -21,7 +20,8 @@ public class HorizontalMove : State<PlayerInfo>
     protected override void OnFixedUpdate(float deltaTime)
     {
         Vector2 vel = _info.Physics.Rigidbody2D.velocity;
-        if (vel.x == 0 || Math.Sign(vel.x) == Math.Sign(_info.Input.MoveDirection.x))
+        // Not moving or Input aligned with Move Dir
+        if (vel.x == 0 || _info.Input.MoveDirection.x == 0 ||  Math.Sign(vel.x) == Math.Sign(_info.Input.MoveDirection.x))
         {
             if (Math.Abs(vel.x) > maxMoveSpeed)
             {
@@ -48,39 +48,9 @@ public class HorizontalMove : State<PlayerInfo>
             }
             else
             {
-                // REDUCE SPEED
-                vel.x -= slowDown * deltaTime * Math.Sign(vel.x);
+                vel.x = moveSpeed * _info.Input.MoveDirection.x;
             }
         }
         _info.Physics.Rigidbody2D.velocity = vel;
-    }
-}
-
-public class Dash : State<PlayerInfo>
-{
-    private Vector2 _dashDir;
-    private float _dashSpeed;
-    private float _dashTime;
-    
-    public Dash(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
-    {
-    }
-
-    protected override void OnEnter()
-    {
-        _dashDir = _info.Input.mouseDir;
-    }
-    
-    protected override void OnExit() { }
-
-    protected override State<PlayerInfo> Transition() => null;
-    
-    protected override State<PlayerInfo> GetInitialState() => null;
-
-    protected override void OnUpdate(float deltaTime) { }
-
-    protected override void OnFixedUpdate(float deltaTime)
-    {
-        
     }
 }
