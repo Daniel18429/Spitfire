@@ -72,6 +72,7 @@ public class Airborne : State<PlayerInfo>
     protected override void OnEnter()
     {
         _info.Physics.Friction = 0.02f;
+        
     }
     
     protected override void OnExit() { }
@@ -79,7 +80,7 @@ public class Airborne : State<PlayerInfo>
     protected override State<PlayerInfo> Transition()
     {
         if(_info.Context.IsGrounded) return Machine.GetStateFromType<Grounded>();
-        else if (_info.Context.LeftWall || _info.Context.RightWall)
+        else if (_info.Context.LeftWall || _info.Context.RightWall && ActiveChild != Machine.GetStateFromType<Jumping>())
         {
             return Machine.GetStateFromType<Walled>();
         }
@@ -123,7 +124,14 @@ public class Walled : HorizontalMove
         if(_info.Context.IsGrounded) return Machine.GetStateFromType<Grounded>();
         else if (_info.Context.LeftWall || _info.Context.RightWall)
         {
-            return null;
+            if (_info.Input.JumpPressed && _info.Fire.HasFlame(_info.Cost.JumpCost))
+            {
+                return Machine.GetStateFromType<WallJump>();
+            }
+            else
+            {
+                return null; 
+            }
         }
         else
         {
@@ -137,7 +145,8 @@ public class Walled : HorizontalMove
 
     protected override void OnFixedUpdate(float deltaTime)
     {
-        if (_info.Physics.Rigidbody2D.velocity.y < -_slideSpeed)
+        base.OnFixedUpdate(deltaTime);
+        if (_info.Physics.Rigidbody2D.velocity.y < -_slideSpeed && _info.Input.MoveDirection.x != 0)
         {
             _info.Physics.Rigidbody2D.velocity = new Vector2(_info.Physics.Rigidbody2D.velocity.x, -_slideSpeed);
         }

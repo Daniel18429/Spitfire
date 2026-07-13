@@ -27,10 +27,10 @@ public class PlayerInfo
     public void Init()
     {
         Context.Init();
-        Input.__init__(Player.transform);
+        Input.Start(Player);
     }
 
-    public void Update(float deltaTime)
+    public void FixedUpdate(float deltaTime)
     {
         Physics.PhysicsUpdate(deltaTime);
         Timers.Tick(deltaTime);
@@ -46,7 +46,7 @@ public class PlayerCost
     public float SlideCost { get; private set; } = 1f;
 }
 
-public class PlayerInput
+public class PlayerInput 
 {
     public Vector2 mouseDir;
     private Transform objToMouse;
@@ -55,9 +55,9 @@ public class PlayerInput
     public bool DashPressed;
     public bool SlidePressed;
 
-    public void __init__(Transform _obj)
+    public void Start(GameObject player)
     {
-        objToMouse = _obj;
+        objToMouse = player.transform;
     }
 
     public void CacheInput(Vector2 moveDirection, bool jumpPressed, bool dashPressed, bool slidePressed)
@@ -141,52 +141,6 @@ public class PlayerContext
         {
             LeftWall = true;
             WallNormal = WallHit.normal;
-        }
-    }
-}
-
-public class PlayerPhysics
-{
-    public PlayerPhysics(Rigidbody2D rb2d)
-    {
-        Rigidbody2D = rb2d;
-    }
-    public Rigidbody2D Rigidbody2D;
-    public Vector2 Acceleration;
-    public float Gravity = 9.8f;
-    public float SpeedCap = 20f;
-    public float YMax;
-    public float Friction = 0.1f;
-
-    public void PhysicsUpdate(float deltaTime)
-    {
-        Rigidbody2D.velocity += Acceleration * deltaTime;
-        Rigidbody2D.velocity -= new Vector2(0, Gravity) * deltaTime;
-        if (Rigidbody2D.velocity.magnitude > SpeedCap)
-        {
-            Rigidbody2D.velocity = Vector2.ClampMagnitude(Rigidbody2D.velocity, SpeedCap);
-        }
-
-        if (Rigidbody2D.velocity.x != 0)
-        {
-            int xVelocitySign =  Math.Sign(Rigidbody2D.velocity.x);
-            
-            Vector2 velocity = Rigidbody2D.velocity;
-            if (xVelocitySign == 1)
-            {
-                velocity.x -= Friction;
-            }
-            else
-            {
-                velocity.x += Friction;
-            }
-            Rigidbody2D.velocity = velocity;
-
-            if (Math.Sign(Rigidbody2D.velocity.x) != xVelocitySign)
-            {
-                Rigidbody2D.velocity = new Vector2(0, Rigidbody2D.velocity.y);
-            }
-            
         }
     }
 }

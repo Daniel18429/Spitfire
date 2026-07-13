@@ -35,7 +35,11 @@ public class StateMachine<T>
 
     public State<T> GetStateFromType<TState>() where TState : State<T> // Returns state instance from sm dictionary
     {
-        if (!states.TryGetValue(typeof(TState), out State<T> nextState)) return null;
+        if (!states.TryGetValue(typeof(TState), out State<T> nextState))
+        {
+            throw new System.Exception("State not found");
+            return null;
+        }
         return nextState;
     }
     

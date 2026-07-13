@@ -51,6 +51,13 @@ public class HorizontalMove : State<PlayerInfo>
                 vel.x = moveSpeed * _info.Input.MoveDirection.x;
             }
         }
+        int wallSide = 0;
+        if (_info.Context.LeftWall) wallSide = -1;
+        else if(_info.Context.RightWall) wallSide = 1;
+        if (Mathf.Sign(_info.Input.MoveDirection.x) == wallSide)
+        {
+            vel.x = 0;
+        }
         _info.Physics.Rigidbody2D.velocity = vel;
     }
 }
