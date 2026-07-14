@@ -46,6 +46,30 @@ public class PlayerCost
     public float SlideCost { get; private set; } = 1f;
 }
 
+public class Values
+{
+
+    public float JumpingGravity { get; private set; }
+    public float UpwardsGravity { get; private set; } // Idk what to call this var but it is inbetween jumping and falling gravity val
+    public float FallingGravity { get;  private set; }
+    public float JumpVelocity { get; private set; }
+    public float JumpHeight { get; private set; } = 10;
+    public float JumpTime { get; private set; } = 0.8f;
+    
+    public float WalkSpeed { get; private set; }
+    public float RunSpeed { get; private set; }
+    public float DashDistance { get; private set; }
+    public float DashTime { get; private set; }
+    public Values()
+    {
+        JumpVelocity = 2 * JumpHeight / JumpTime;
+        JumpingGravity = JumpHeight / JumpTime;
+        FallingGravity = JumpingGravity * 2;
+
+    }
+
+}
+
 public class PlayerInput 
 {
     public Vector2 mouseDir;
