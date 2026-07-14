@@ -9,7 +9,7 @@ public class PlayerPhysics
     public Rigidbody2D Rigidbody2D;
     public Vector2 Acceleration;
     public float Gravity = 9.8f;
-    public float SpeedCap = 20f;
+    public float SpeedCap = 50f;
     public float YMax;
     public float Friction = 0.1f;
 

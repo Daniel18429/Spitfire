@@ -5,6 +5,7 @@ public class Falling : HorizontalMove
     public Falling(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
         moveSpeed = 5f;
+        gravity = _info.Val.UpwardsGravity;
     }
 
     protected override void OnEnter()
@@ -55,12 +56,16 @@ public class WallJump : HorizontalMove
 public class NormalJump : HorizontalMove
 {
     private MyTimer _jumpDurationTimer = new MyTimer();
-    private float _jumpDuration = 1.2f;
+    private float _jumpDuration;
     private float _jumpForce = 10f;
     private float gravity = 10f;
     public NormalJump(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
         moveSpeed = 5f;
+
+        _jumpDuration = _info.Val.JumpTime;
+        _jumpForce = _info.Val.JumpVelocity;
+        gravity = _info.Val.JumpingGravity;
     }
 
     protected override void OnEnter()

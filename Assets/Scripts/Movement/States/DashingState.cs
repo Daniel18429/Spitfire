@@ -4,12 +4,14 @@ using UnityEngine;
 public class Dash : State<PlayerInfo>
 {
     private Vector2 _dashDir;
-    private float _dashSpeed = 40;
-    private float _dashTime = 0.23f;
+    private float _dashSpeed;
+    private float _dashTime;
     private MyTimer _dashTimer = new MyTimer();
     
     public Dash(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
+        _dashSpeed = _info.Val.DashDistance / _info.Val.DashTime;
+        _dashTime =  _info.Val.DashTime;
     }
 
     protected override void OnEnter()
@@ -21,6 +23,7 @@ public class Dash : State<PlayerInfo>
     protected override void OnExit()
     {
         _info.Timers.DashCooldown.Reset(2.0f);
+        _info.Physics.Rigidbody2D.velocity = _info.Physics.Rigidbody2D.velocity.normalized * (_dashSpeed * 0.3f);
     }
 
     protected override State<PlayerInfo> Transition()

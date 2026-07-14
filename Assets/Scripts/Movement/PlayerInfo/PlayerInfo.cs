@@ -11,7 +11,7 @@ public class PlayerInfo
     public PlayerFire Fire;
     public PlayerCost Cost;
     public GameObject Player;
-    
+    public PlayerValues Val;
     
     public PlayerInfo(GameObject gameObject)
     {
@@ -22,6 +22,7 @@ public class PlayerInfo
         Timers = new PlayerTimers();
         Fire = gameObject.GetComponent<PlayerFire>();
         Cost = new PlayerCost();
+        Val = new PlayerValues();
     }
 
     public void Init()
@@ -46,26 +47,26 @@ public class PlayerCost
     public float SlideCost { get; private set; } = 1f;
 }
 
-public class Values
+public class PlayerValues
 {
 
     public float JumpingGravity { get; private set; }
     public float UpwardsGravity { get; private set; } // Idk what to call this var but it is inbetween jumping and falling gravity val
     public float FallingGravity { get;  private set; }
     public float JumpVelocity { get; private set; }
-    public float JumpHeight { get; private set; } = 10;
-    public float JumpTime { get; private set; } = 0.8f;
+    public float JumpHeight { get; private set; } = 7;
+    public float JumpTime { get; private set; } = 0.7f;
     
     public float WalkSpeed { get; private set; }
     public float RunSpeed { get; private set; }
-    public float DashDistance { get; private set; }
-    public float DashTime { get; private set; }
-    public Values()
+    public float DashDistance { get; private set; } = 8f;
+    public float DashTime { get; private set; } = 0.33f;
+    public PlayerValues()
     {
         JumpVelocity = 2 * JumpHeight / JumpTime;
-        JumpingGravity = JumpHeight / JumpTime;
-        FallingGravity = JumpingGravity * 2;
-
+        JumpingGravity = (float)(2 * JumpHeight / Math.Pow(JumpTime, 2));
+        FallingGravity = JumpingGravity * 1.4f;
+        UpwardsGravity = FallingGravity;
     }
 
 }
