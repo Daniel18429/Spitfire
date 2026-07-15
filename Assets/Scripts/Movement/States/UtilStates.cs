@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HorizontalMove : State<PlayerInfo>
@@ -19,6 +20,10 @@ public class HorizontalMove : State<PlayerInfo>
 
     protected override void OnFixedUpdate(float deltaTime)
     {
+        if (moveSpeed == 0)
+        {
+            throw new Exception("MoveSpeed is Zero you Twat!");
+        }
         Vector2 vel = _info.Physics.Rigidbody2D.velocity;
         // Not moving or Input aligned with Move Dir
         if (vel.x == 0 || _info.Input.MoveDirection.x == 0 ||  Math.Sign(vel.x) == Math.Sign(_info.Input.MoveDirection.x))

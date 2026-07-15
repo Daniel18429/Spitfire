@@ -35,7 +35,6 @@ public class PlayerInfo
     {
         Physics.PhysicsUpdate(deltaTime);
         Timers.Tick(deltaTime);
-        Context.UpdateContext(Player);
         Input.Reset();
     }
 }
@@ -45,30 +44,6 @@ public class PlayerCost
     public float DashCost { get; private set; } = 5f;
     public float JumpCost { get; private set; } = 1f;
     public float SlideCost { get; private set; } = 1f;
-}
-
-public class PlayerValues
-{
-
-    public float JumpingGravity { get; private set; }
-    public float UpwardsGravity { get; private set; } // Idk what to call this var but it is inbetween jumping and falling gravity val
-    public float FallingGravity { get;  private set; }
-    public float JumpVelocity { get; private set; }
-    public float JumpHeight { get; private set; } = 7;
-    public float JumpTime { get; private set; } = 0.7f;
-    
-    public float WalkSpeed { get; private set; }
-    public float RunSpeed { get; private set; }
-    public float DashDistance { get; private set; } = 8f;
-    public float DashTime { get; private set; } = 0.33f;
-    public PlayerValues()
-    {
-        JumpVelocity = 2 * JumpHeight / JumpTime;
-        JumpingGravity = (float)(2 * JumpHeight / Math.Pow(JumpTime, 2));
-        FallingGravity = JumpingGravity * 1.4f;
-        UpwardsGravity = FallingGravity;
-    }
-
 }
 
 public class PlayerInput 
