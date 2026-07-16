@@ -4,12 +4,15 @@ public class Falling : HorizontalMove
     private float gravity = 14f;
     public Falling(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
-        moveSpeed = 5f;
-        gravity = _info.Val.UpwardsGravity;
     }
 
     protected override void OnEnter()
     {
+        // In case they have changed
+        moveSpeed = _info.Val.AirWalkSpeed;
+        gravity = _info.Val.UpwardsGravity;
+        
+        
         _info.Physics.Gravity = gravity;
     }
     protected override void OnExit() { }
@@ -33,15 +36,17 @@ public class WallJump : HorizontalMove
 {
     
     private MyTimer _noHorizontalMoveTimer = new MyTimer();
-    private float _noHorizontalMove = 0.3f;
     public WallJump(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
-        moveSpeed = 5f;
     }
 
     protected override void OnEnter()
     {
-        _noHorizontalMoveTimer.Reset(_noHorizontalMove);
+        
+        moveSpeed = _info.Val.AirWalkSpeed;
+        
+        
+        _noHorizontalMoveTimer.Reset(_info.Val.WallJumpUncontrolledTime);
         _info.Physics.Gravity = _info.Val.WallJumpGravity;
         Vector2 velocity = _info.Physics.Rigidbody2D.velocity;
         velocity.y = _info.Val.WallJumpVelocityY;
@@ -93,15 +98,16 @@ public class NormalJump : HorizontalMove
     private float gravity = 10f;
     public NormalJump(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
-        moveSpeed = 5f;
-
-        _jumpDuration = _info.Val.JumpTime;
-        _jumpForce = _info.Val.JumpVelocity;
-        gravity = _info.Val.JumpingGravity;
     }
 
     protected override void OnEnter()
     {
+        moveSpeed = _info.Val.AirWalkSpeed;
+        _jumpDuration = _info.Val.JumpTime;
+        _jumpForce = _info.Val.JumpVelocity;
+        gravity = _info.Val.JumpingGravity;
+        
+        
         _info.Context.IsGrounded = false; // MAKING SURE WE DON'T RESET INTO INFINITE CYCLE
         _jumpDurationTimer.Reset(_jumpDuration);
         Vector2 velocity = _info.Physics.Rigidbody2D.velocity;

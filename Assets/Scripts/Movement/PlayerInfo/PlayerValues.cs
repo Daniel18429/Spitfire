@@ -1,33 +1,65 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class PlayerValues
+[CreateAssetMenu(fileName = "PlayerValues", menuName = "ScriptableObjects/PlayerValues", order = 1)]
+public class PlayerValues : ScriptableObject
 {
-    public float JumpingGravity { get; private set; }
-    public float UpwardsGravity { get; private set; } // Idk what to call this var but it is inbetween jumping and falling gravity val
-    public float FallingGravity { get;  private set; }
-    public float JumpVelocity { get; private set; }
-    public float JumpHeight { get; private set; } = 7;
-    public float JumpTime { get; private set; } = 0.7f;
-    public float WallJumpHeight { get; private set; } = 5;
-    public float WallJumpTime { get; private set; } = 0.7f;
-    public float WallJumpVelocityY { get; private set; } 
-    public float WallJumpVelocityX { get; private set; } = 15;
-    public float WallJumpGravity { get; private set; }
+    [Header("Jump")]
+    [SerializeField] private float cayoteTime = 0.4f;
+    public float CayoteTime => cayoteTime;
+    [Header("NormalJump")] 
+    [SerializeField] private float jumpHeight = 7f;
+
+    [SerializeField] private float jumpTime = 0.7f;
     
-    public float WalkSpeed { get; private set; }
-    public float RunSpeed { get; private set; }
-    public float DashDistance { get; private set; } = 8f;
-    public float DashTime { get; private set; } = 0.33f;
-    public PlayerValues()
-    {
-        JumpVelocity = 2 * JumpHeight / JumpTime;
-        WallJumpVelocityY = 2 * WallJumpHeight / WallJumpTime;
-        WallJumpGravity = (float)(2 * WallJumpHeight / Math.Pow(WallJumpTime, 2));
-        JumpingGravity = (float)(2 * JumpHeight / Math.Pow(JumpTime, 2));
-        FallingGravity = JumpingGravity * 1.4f;
-        UpwardsGravity = FallingGravity;
-    }
+    public float JumpHeight => jumpHeight;
+    public float JumpTime => jumpTime;
+    public float JumpVelocity => 2 * JumpHeight / JumpTime;
+    public float JumpingGravity => (float)(2 * JumpHeight / Math.Pow(JumpTime, 2));
+    
+    [Header("WallJump")]
+    [SerializeField] private float wallJumpHeight = 3.14f;
+    [SerializeField] private float wallJumpTime = 0.4f;
+    [SerializeField] private float wallJumpUncontrolledTime = 0.24f;
+    [SerializeField] private float wallJumpVelocityX = 20f;
+    
+    public float WallJumpHeight => wallJumpHeight;
+    public float WallJumpTime => wallJumpTime;
+    public float WallJumpVelocityY => 2 * WallJumpHeight / WallJumpTime;
+    public float WallJumpGravity => (float)(2 * WallJumpHeight / Math.Pow(WallJumpTime, 2));
+    public float WallJumpVelocityX => wallJumpVelocityX;
+    public float WallJumpUncontrolledTime => wallJumpUncontrolledTime;
+    
+    [Header("WallSliding")]
+    [SerializeField] private float wallSlidingGravity = 0.4f;
+    [SerializeField] private float maxWallSpeed = 0.4f;
+    public float WallSlidingGravity => wallSlidingGravity;
+    public float MaxWallSpeed => maxWallSpeed;
+    
+    [Header("MovementSpeeds")]
+    [SerializeField] private float groundWalkSpeed = 9f;
+    [SerializeField] private float airWalkSpeed = 10f;
+    public float GroundWalkSpeed => groundWalkSpeed;
+    public float AirWalkSpeed => airWalkSpeed;
+    
+    [Header("Dash")]
+    [SerializeField] private float dashDistance = 8f;
+    [SerializeField] private float dashTime = 0.7f;
+    
+    public float DashDistance => dashDistance;
+    public float DashTime => dashTime;
+    
+    [Header("GravityMultiplier")]
+    [SerializeField] private float upwardsGravityMultiplier = 1.4f;
+    [SerializeField] private float fallingGravityMultiplier = 1.6f;
+
+    public float UpwardsGravity => JumpingGravity * upwardsGravityMultiplier; // Idk what to call this var but it is inbetween jumping and falling gravity val
+    public float FallingGravity => JumpingGravity * fallingGravityMultiplier;
+    
+    [Header("Friction")]
+    [SerializeField] private float groundFriction = 0.6f;
+    [SerializeField] private float airFriction = 0.02f;
+    public float GroundFriction => groundFriction;
+    public float AirFriction => airFriction;
 
 }

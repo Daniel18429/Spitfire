@@ -10,12 +10,12 @@ public class Grounded : State<PlayerInfo>
 
     protected override void OnEnter()
     {
-        _info.Physics.Friction = 0.06f;
+        _info.Physics.Friction = _info.Val.GroundFriction;
     }
 
     protected override void OnExit()
     {
-        _info.Timers.CayoteTime.Reset(0.2f);
+        _info.Timers.CayoteTime.Reset(_info.Val.CayoteTime);
     }
 
     protected override State<PlayerInfo> Transition()
@@ -71,7 +71,7 @@ public class Airborne : State<PlayerInfo>
 
     protected override void OnEnter()
     {
-        _info.Physics.Friction = 0.02f;
+        _info.Physics.Friction = _info.Val.AirFriction;
         
     }
     
@@ -115,6 +115,8 @@ public class Walled : HorizontalMove
 
     protected override void OnEnter()
     {
+        _slideSpeed = _info.Val.MaxWallSpeed;
+        _info.Physics.Gravity = _info.Val.WallSlidingGravity;
     }
     
     protected override void OnExit() { }

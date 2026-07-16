@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    [SerializeField] private PlayerInfo _playerInfo;
+    [SerializeField] public PlayerInfo _playerInfo { get; private set; }
     [SerializeField] private StateMachine<PlayerInfo> _stateMachine = new StateMachine<PlayerInfo>();
+    [SerializeField] private PlayerValues values;
+    [SerializeField] private PlayerCost cost;
     
     public void Awake()
     {
-        _playerInfo = new PlayerInfo(this.gameObject);
+        _playerInfo = new PlayerInfo(this.gameObject, values, cost);
         _playerInfo.Init();
         StateNode<PlayerInfo>[] children =
         {

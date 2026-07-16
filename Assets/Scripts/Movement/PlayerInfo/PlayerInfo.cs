@@ -11,9 +11,9 @@ public class PlayerInfo
     public PlayerFire Fire;
     public PlayerCost Cost;
     public GameObject Player;
-    public PlayerValues Val;
+    public PlayerValues Val { get; private set; }
     
-    public PlayerInfo(GameObject gameObject)
+    public PlayerInfo(GameObject gameObject, PlayerValues values, PlayerCost cost)
     {
         Player = gameObject;
         Physics = new PlayerPhysics(gameObject.GetComponent<Rigidbody2D>());
@@ -21,8 +21,8 @@ public class PlayerInfo
         Context = new PlayerContext();
         Timers = new PlayerTimers();
         Fire = gameObject.GetComponent<PlayerFire>();
-        Cost = new PlayerCost();
-        Val = new PlayerValues();
+        Cost = cost;
+        Val = values;
     }
 
     public void Init()
@@ -39,12 +39,7 @@ public class PlayerInfo
     }
 }
 
-public class PlayerCost
-{
-    public float DashCost { get; private set; } = 5f;
-    public float JumpCost { get; private set; } = 1f;
-    public float SlideCost { get; private set; } = 1f;
-}
+
 
 public class PlayerInput 
 {
@@ -117,6 +112,7 @@ public class PlayerContext
 
     public void UpdateContext(GameObject gameObject)
     {
+        CollisionMask = LayerMask.GetMask("Ground");
         IsGrounded = OnWall = LeftWall = RightWall = false;
         GroundNormal = WallNormal = Vector2.zero;
         float radius = gameObject.GetComponent<CircleCollider2D>().radius;

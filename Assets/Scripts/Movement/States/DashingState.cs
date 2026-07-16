@@ -10,14 +10,18 @@ public class Dash : State<PlayerInfo>
     
     public Dash(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
-        _dashSpeed = _info.Val.DashDistance / _info.Val.DashTime;
-        _dashTime =  _info.Val.DashTime;
     }
 
     protected override void OnEnter()
     {
+        
+        _dashSpeed = _info.Val.DashDistance / _info.Val.DashTime;
+        _dashTime =  _info.Val.DashTime;
+        
+        
         _dashDir = _info.Input.mouseDir.normalized;
         _dashTimer.Reset(_dashTime);
+        _info.Fire.Consume(_info.Cost.DashCost);
     }
 
     protected override void OnExit()

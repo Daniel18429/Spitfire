@@ -1,13 +1,29 @@
 using UnityEngine;
 
-public class PlayerFire : Fire
+public class PlayerFire : BigFlame
 {
+    private float maxFlame;
+    private PlayerCost _costs;
+    private float _dwindleAmount;
 
-    public override void Start()
+    public void Start()
     {
-        maxFlame = 100000;
-        dwindleAmount = 0;
-        base.Start();
+        _costs = this.GetComponent<MovementController>()._playerInfo.Cost;
+        maxFlame = _costs.MaxFire;
+        Flame = maxFlame;
+        _dwindleAmount = 1;
     }
-// UTIL FUNCTIONS
+
+    protected override void Adjust(float amount)
+    {
+        base.Adjust(amount);
+        if(Flame > maxFlame)
+        {
+            Flame = maxFlame;
+        }
+    }
+    public void FixedUpdate()
+    {
+        Consume(_dwindleAmount, Time.fixedDeltaTime);
+    }
 }

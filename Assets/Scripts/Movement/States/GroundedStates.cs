@@ -27,11 +27,12 @@ public class Walking : HorizontalMove
 {
     public Walking(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
-        moveSpeed = 8.0f;
     }
 
     protected override void OnEnter()
     {
+        
+        moveSpeed = _info.Val.GroundWalkSpeed;
     }
     
     protected override void OnExit() { }
