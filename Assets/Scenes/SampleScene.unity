@@ -913,6 +913,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1449469801}
+  - component: {fileID: 1449469804}
   - component: {fileID: 1449469802}
   - component: {fileID: 1449469803}
   - component: {fileID: 1449469800}
@@ -1067,8 +1068,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03156e9cacfc499aa7eaa6b1f13c489a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  values: {fileID: 11400000, guid: b862bb49ad77746e2adfa4f820a5e575, type: 2}
-  cost: {fileID: 11400000, guid: 9e65a0afc346d4b999a1393116714349, type: 2}
 --- !u!114 &1449469803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1083,6 +1082,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Flame: 0
   extinguished: 0
+--- !u!114 &1449469804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449469796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad1106a83d641258955a13bffb9ab16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  values: {fileID: 11400000, guid: b862bb49ad77746e2adfa4f820a5e575, type: 2}
+  cost: {fileID: 11400000, guid: 9e65a0afc346d4b999a1393116714349, type: 2}
 --- !u!1 &1476293278
 GameObject:
   m_ObjectHideFlags: 0
