@@ -31,7 +31,7 @@ public class PlayerValues : ScriptableObject
     public float WallJumpUncontrolledTime => wallJumpUncontrolledTime;
     
     [Header("WallSliding")]
-    [SerializeField] private float wallSlidingGravity = 0.4f;
+    [SerializeField] private float wallSlidingGravity = 2f;
     [SerializeField] private float maxWallSpeed = 0.4f;
     public float WallSlidingGravity => wallSlidingGravity;
     public float MaxWallSpeed => maxWallSpeed;

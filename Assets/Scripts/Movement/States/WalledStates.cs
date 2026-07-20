@@ -13,6 +13,7 @@ public class WallSliding : HorizontalMove
     {
         _slideSpeed = _info.Val.MaxWallSpeed;
         _info.Physics.Gravity = _info.Val.WallSlidingGravity;
+        _info.Timers.CayoteTime.End();
     }
     
     protected override void OnExit() { }

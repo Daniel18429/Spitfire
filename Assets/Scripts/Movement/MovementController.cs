@@ -6,13 +6,10 @@ public class MovementController : MonoBehaviour
 {
     [SerializeField] public PlayerInfo _playerInfo { get; private set; }
     [SerializeField] private StateMachine<PlayerInfo> _stateMachine = new StateMachine<PlayerInfo>();
-    [SerializeField] private PlayerValues values;
-    [SerializeField] private PlayerCost cost;
     
     public void Awake()
     {
-        _playerInfo = new PlayerInfo(this.gameObject, values, cost);
-        _playerInfo.Init();
+        _playerInfo = GetComponent<PlayerData>().PlayerInfo;
         StateNode<PlayerInfo>[] children =
         {
             Node<Dash>(),
@@ -24,7 +21,7 @@ public class MovementController : MonoBehaviour
                 Node<Jumping>(
                     Node<NormalJump>(),
                     Node<WallJump>()),
-                Node<WallJump>()),
+                Node<Falling>()),
             Node<Walled>(
                 Node<WallSliding>())
         };

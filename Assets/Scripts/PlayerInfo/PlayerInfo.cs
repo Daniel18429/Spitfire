@@ -97,6 +97,7 @@ public class PlayerTimers
 {
     public MyTimer CayoteTime = new MyTimer();
     public MyTimer DashCooldown = new MyTimer();
+    public MyTimer AttackCooldown = new MyTimer();
 
     public void Tick(float deltaTime)
     {

@@ -19,8 +19,8 @@ MonoBehaviour:
   wallJumpTime: 0.3
   wallJumpUncontrolledTime: 0.27
   wallJumpVelocityX: 17
-  wallSlidingGravity: 0.4
-  maxWallSpeed: 0.4
+  wallSlidingGravity: 3
+  maxWallSpeed: 5
   groundWalkSpeed: 9
   airWalkSpeed: 10
   dashDistance: 8
