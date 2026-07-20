@@ -16,4 +16,10 @@ public class MyTimer
         Done = false;
         TimeRemaining = deltaTime;
     }
+
+    public void End()
+    {
+        TimeRemaining = 0;
+        Done = true;
+    }
 }

@@ -44,3 +44,9 @@ public class StateNode<T>
         this.children = new List<StateNode<T>>(children);
     }
 }
+
+public static class Tree<T>
+{
+    public static StateNode<T> Node<TState>(params StateNode<T>[] children)
+        where TState : State<T> => new(typeof(TState), children);
+}

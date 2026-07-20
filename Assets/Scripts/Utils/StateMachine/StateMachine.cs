@@ -21,16 +21,14 @@ public class StateMachine<T>
             path[i].Enter();
         }
         initialState.RecursiveEnter();
-        CurrentState = initialState;
-        List<State<T>> temp = CurrentState.Leaf().PathToRoot();
+        CurrentState = initialState.Leaf();
+        List<State<T>> temp = CurrentState.PathToRoot();
         string msg = "";
         for (int i = 0; i < temp.Count; i++)
         {
             msg += temp[i] + "->";
         }
         Debug.Log(msg);
-        CurrentState = initialState;
-        initialState.RecursiveEnter();
     }
 
     public State<T> GetStateFromType<TState>() where TState : State<T> // Returns state instance from sm dictionary

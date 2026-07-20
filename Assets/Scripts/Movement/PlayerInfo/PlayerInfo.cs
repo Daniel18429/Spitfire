@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+
 [System.Serializable]
 public class PlayerInfo
 {
@@ -10,7 +11,10 @@ public class PlayerInfo
     public PlayerTimers Timers;
     public PlayerFire Fire;
     public PlayerCost Cost;
+    public Guards Guard;
+    
     public GameObject Player;
+    
     public PlayerValues Val { get; private set; }
     
     public PlayerInfo(GameObject gameObject, PlayerValues values, PlayerCost cost)
@@ -23,6 +27,7 @@ public class PlayerInfo
         Fire = gameObject.GetComponent<PlayerFire>();
         Cost = cost;
         Val = values;
+        Guard = new Guards(this);
     }
 
     public void Init()
@@ -37,6 +42,18 @@ public class PlayerInfo
         Timers.Tick(deltaTime);
         Input.Reset();
     }
+}
+
+public class Guards
+{
+    private PlayerInfo _info;
+    public Guards(PlayerInfo info)
+    {
+        _info = info;
+    }
+
+    public bool Dash => _info.Input.DashPressed && _info.Fire.HasFlame(_info.Cost.DashCost) &&
+                           _info.Timers.DashCooldown.Done;
 }
 
 

@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using static Tree<PlayerInfo>;
+
 public class MovementController : MonoBehaviour
 {
     [SerializeField] public PlayerInfo _playerInfo { get; private set; }
@@ -13,18 +15,18 @@ public class MovementController : MonoBehaviour
         _playerInfo.Init();
         StateNode<PlayerInfo>[] children =
         {
-            new StateNode<PlayerInfo>(typeof(Dash)),
-            new StateNode<PlayerInfo>(typeof(Walled)),
-            new StateNode<PlayerInfo>(typeof(Grounded),
-                new StateNode<PlayerInfo>(typeof(Idle)),
-                new StateNode<PlayerInfo>(typeof(Walking)),
-                new StateNode<PlayerInfo>(typeof(Sliding))
-                ),
-            new StateNode<PlayerInfo>(typeof(Airborne),
-                new StateNode<PlayerInfo>(typeof(Jumping),
-                    new StateNode<PlayerInfo>(typeof(NormalJump)),
-                    new StateNode<PlayerInfo>(typeof(WallJump))),
-                new StateNode<PlayerInfo>(typeof(Falling)))
+            Node<Dash>(),
+            Node<Grounded>(
+                Node<Idle>(),
+                Node<Walking>(),
+                Node<Sliding>()),
+            Node<Airborne>(
+                Node<Jumping>(
+                    Node<NormalJump>(),
+                    Node<WallJump>()),
+                Node<WallJump>()),
+            Node<Walled>(
+                Node<WallSliding>())
         };
         StateMachineBuilder<PlayerInfo> builder = new StateMachineBuilder<PlayerInfo>(_stateMachine, _playerInfo);
         builder.BuildTree(children);

@@ -80,7 +80,7 @@ public class Airborne : State<PlayerInfo>
     protected override State<PlayerInfo> Transition()
     {
         if(_info.Context.IsGrounded) return Machine.GetStateFromType<Grounded>();
-        else if (_info.Context.LeftWall || _info.Context.RightWall && ActiveChild != Machine.GetStateFromType<Jumping>())
+        else if ((_info.Context.LeftWall || _info.Context.RightWall) && ActiveChild != Machine.GetStateFromType<Jumping>())
         {
             return Machine.GetStateFromType<Walled>();
         }
@@ -90,7 +90,7 @@ public class Airborne : State<PlayerInfo>
             {
                 return Machine.GetStateFromType<Jumping>();
             }
-            else if (_info.Input.DashPressed && _info.Fire.HasFlame(_info.Cost.DashCost) && _info.Timers.DashCooldown.Done)
+            else if (_info.Guard.Dash)
             {
                 return Machine.GetStateFromType<Dash>();
             }
@@ -107,7 +107,6 @@ public class Airborne : State<PlayerInfo>
 
 public class Walled : HorizontalMove
 {
-    private float _slideSpeed = 2f;
     public Walled(StateMachine<PlayerInfo> machine, PlayerInfo info, State<PlayerInfo> parent) : base(machine, info, parent)
     {
         moveSpeed = 1;
@@ -115,8 +114,6 @@ public class Walled : HorizontalMove
 
     protected override void OnEnter()
     {
-        _slideSpeed = _info.Val.MaxWallSpeed;
-        _info.Physics.Gravity = _info.Val.WallSlidingGravity;
     }
     
     protected override void OnExit() { }
@@ -132,6 +129,7 @@ public class Walled : HorizontalMove
             }
             else
             {
+                if (_info.Physics.Rigidbody2D.velocity.y < 0) return Machine.GetStateFromType<WallSliding>();
                 return null; 
             }
         }
@@ -144,13 +142,4 @@ public class Walled : HorizontalMove
     protected override State<PlayerInfo> GetInitialState() => null;
 
     protected override void OnUpdate(float deltaTime) { }
-
-    protected override void OnFixedUpdate(float deltaTime)
-    {
-        base.OnFixedUpdate(deltaTime);
-        if (_info.Physics.Rigidbody2D.velocity.y < -_slideSpeed && _info.Input.MoveDirection.x != 0)
-        {
-            _info.Physics.Rigidbody2D.velocity = new Vector2(_info.Physics.Rigidbody2D.velocity.x, -_slideSpeed);
-        }
-    }
 }
